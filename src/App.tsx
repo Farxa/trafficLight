@@ -137,9 +137,30 @@ function App() {
       }, 5000);
     }
   }, [pedestrianRequest, mainRoadLight, sideRoadLight]);
+
+  useEffect(() => {
+    if (pedestrianRequest && pedestrianLight === "red") {
+      setPedestrianBlinking(true);
+    } else {
+      setPedestrianBlinking(false);
+    }
+  }, [pedestrianRequest, pedestrianLight]);
+
+  const handlePedestrianRequest = () => {
+    setPedestrianRequest(true);
+  };
+
   return (
     <>
-      <h1>Traffic light demo</h1>
+      <Box textAlign="center">
+        <Typography
+          variant="h1"
+          gutterBottom
+          sx={{ margin: "40px", padding: "10px" }}
+        >
+          Traffic Lights Demo
+        </Typography>
+      </Box>
       <Root>
         <Row>
           <Container>
@@ -150,15 +171,94 @@ function App() {
             >
               Start
             </PedestrianButton>
+            <TrafficLight
+              style={{
+                display: "flex",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              }}
+            >
+              <LightCircle
+                style={{
+                  backgroundColor:
+                    mainRoadLight === "green" ? "green" : "#CCCCCC",
+                }}
+              />
+              <LightCircle
+                style={{
+                  backgroundColor:
+                    mainRoadLight === "yellow" ? "yellow" : "#CCCCCC",
+                }}
+              />
+              <LightCircle
+                style={{
+                  backgroundColor: mainRoadLight === "red" ? "red" : "#CCCCCC",
+                }}
+              />
+            </TrafficLight>
           </Container>
           <Container>
+            <Box
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <TrafficLight>
+                <LightCircle
+                  style={{
+                    backgroundColor:
+                      pedestrianLight === "red" ? "red" : "#CCCCCC",
+                    animation: pedestrianBlinking
+                      ? "blink 0.5s linear infinite"
+                      : "none",
+                  }}
+                />
+                <LightCircle
+                  style={{
+                    backgroundColor:
+                      pedestrianLight === "green" ? "green" : "#CCCCCC",
+                  }}
+                />
+              </TrafficLight>
+              <FontAwesomeIcon icon={faPersonWalking} color="black" size="3x" />
+            </Box>
           </Container>
         </Row>
         <Row>
+          <Container />
           <Container>
-            <h3>nothing</h3>
-          </Container>
-          <Container>
+            <TrafficLight
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+              }}
+            >
+              <LightCircle
+                style={{
+                  backgroundColor: sideRoadLight === "red" ? "red" : "#CCCCCC",
+                }}
+              />
+              <LightCircle
+                style={{
+                  backgroundColor:
+                    sideRoadLight === "yellow" ? "yellow" : "#CCCCCC",
+                }}
+              />
+              <LightCircle
+                style={{
+                  backgroundColor:
+                    sideRoadLight === "green" ? "green" : "#CCCCCC",
+                }}
+              />
+            </TrafficLight>
           </Container>
         </Row>
       </Root>
