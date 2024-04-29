@@ -1,66 +1,10 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Typography, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonWalking } from "@fortawesome/free-solid-svg-icons";
-import backgroundImage from "./assets/crossroad.png";
-
-const Root = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  width: "100vw",
-  margin: "25px 0 0 0;",
-  padding: 0,
-  backgroundImage: `url(${backgroundImage})`,
-  backgroundSize: "cover",
-});
-
-const Row = styled(Box)({
-  display: "flex",
-  flexDirection: "row",
-  height: "50%",
-  width: "100%",
-});
-
-const Container = styled(Box)({
-  width: "50%",
-  display: "flex",
-  position: "relative",
-});
-
-const TrafficLight = styled(Box)({
-  borderRadius: 10,
-  height: "fit-content",
-  backgroundColor: "black",
-  padding: "3px 8px",
-});
-
-const LightCircle = styled(Box)({
-  width: 40,
-  height: 40,
-  borderRadius: "50%",
-  margin: "10px auto",
-  "@keyframes blink": {
-    "0%": {
-      opacity: 1,
-    },
-    "50%": {
-      opacity: 0.5,
-    },
-    "100%": {
-      opacity: 1,
-    },
-  },
-});
-
-const PedestrianButton = styled(Button)(() => ({
-  height: "fit-content",
-  width: "fit-content",
-  position: "absolute",
-  top: 20,
-  left: 60,
-}));
+import { TrafficLight } from "./components/TrafficLight";
+import { PedestrianButton } from "./components/PedestrianButton";
+import { Root, Row, Container } from "./components/Layout";
 
 function App() {
   const [mainRoadLight, setMainRoadLight] = useState<
@@ -82,22 +26,20 @@ function App() {
         !pedestrianRequest && setSideRoadLight("yellow");
         setTimeout(() => {
           setMainRoadLight("red");
+          !pedestrianRequest && setSideRoadLight("green");
           setTimeout(() => {
             if (!pedestrianRequest) {
               if (sideRoadLight === "red") {
                 setSideRoadLight("green");
+                setMainRoadLight("red");
                 setTimeout(() => {
                   setSideRoadLight("yellow");
                   setMainRoadLight("yellow");
                   setTimeout(() => {
                     setSideRoadLight("red");
-                    setTimeout(() => {
-                      setMainRoadLight("green");
-                    }, 5000);
+                    setMainRoadLight("green");
                   }, 1000);
                 }, 5000);
-              } else if (sideRoadLight === "green") {
-                setMainRoadLight("red");
               }
             }
           }, 2000);
@@ -152,15 +94,13 @@ function App() {
 
   return (
     <>
-      <Box textAlign="center">
-        <Typography
-          variant="h1"
-          gutterBottom
-          sx={{ margin: "40px", padding: "10px" }}
-        >
-          Traffic Lights Demo
-        </Typography>
-      </Box>
+      <Typography
+        variant="h1"
+        gutterBottom
+        sx={{ margin: "40px", padding: "10px", textAlign: "center" }}
+      >
+        Traffic Lights Demo
+      </Typography>
       <Root>
         <Row>
           <Container>
@@ -172,6 +112,10 @@ function App() {
               Start
             </PedestrianButton>
             <TrafficLight
+              redLight={mainRoadLight === "red"}
+              yellowLight={mainRoadLight === "yellow"}
+              greenLight={mainRoadLight === "green"}
+              orientation="horizontal"
               style={{
                 display: "flex",
                 position: "absolute",
@@ -179,25 +123,7 @@ function App() {
                 right: 110,
                 gap: "10px",
               }}
-            >
-              <LightCircle
-                style={{
-                  backgroundColor:
-                    mainRoadLight === "green" ? "green" : "#CCCCCC",
-                }}
-              />
-              <LightCircle
-                style={{
-                  backgroundColor:
-                    mainRoadLight === "yellow" ? "yellow" : "#CCCCCC",
-                }}
-              />
-              <LightCircle
-                style={{
-                  backgroundColor: mainRoadLight === "red" ? "red" : "#CCCCCC",
-                }}
-              />
-            </TrafficLight>
+            />
           </Container>
           <Container>
             <Box
@@ -210,23 +136,11 @@ function App() {
                 gap: "10px",
               }}
             >
-              <TrafficLight>
-                <LightCircle
-                  style={{
-                    backgroundColor:
-                      pedestrianLight === "red" ? "red" : "#CCCCCC",
-                    animation: pedestrianBlinking
-                      ? "blink 0.5s linear infinite"
-                      : "none",
-                  }}
-                />
-                <LightCircle
-                  style={{
-                    backgroundColor:
-                      pedestrianLight === "green" ? "green" : "#CCCCCC",
-                  }}
-                />
-              </TrafficLight>
+              <TrafficLight
+                redLight={pedestrianLight === "red"}
+                greenLight={pedestrianLight === "green"}
+                blinking={pedestrianBlinking}
+              />
               <FontAwesomeIcon icon={faPersonWalking} color="black" size="3x" />
             </Box>
           </Container>
@@ -235,30 +149,15 @@ function App() {
           <Container />
           <Container>
             <TrafficLight
+              redLight={sideRoadLight === "red"}
+              yellowLight={sideRoadLight === "yellow"}
+              greenLight={sideRoadLight === "green"}
               style={{
                 position: "absolute",
                 top: 150,
                 left: 110,
               }}
-            >
-              <LightCircle
-                style={{
-                  backgroundColor: sideRoadLight === "red" ? "red" : "#CCCCCC",
-                }}
-              />
-              <LightCircle
-                style={{
-                  backgroundColor:
-                    sideRoadLight === "yellow" ? "yellow" : "#CCCCCC",
-                }}
-              />
-              <LightCircle
-                style={{
-                  backgroundColor:
-                    sideRoadLight === "green" ? "green" : "#CCCCCC",
-                }}
-              />
-            </TrafficLight>
+            />
           </Container>
         </Row>
       </Root>
