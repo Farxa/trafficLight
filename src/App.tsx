@@ -24,7 +24,6 @@ const Row = styled(Box)({
 });
 
 const Container = styled(Box)({
-  border: "1px solid black",
   width: "50%",
   display: "flex",
   position: "relative",
@@ -75,6 +74,41 @@ function App() {
   );
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (mainRoadLight === "green") {
+        setMainRoadLight("yellow");
+        !pedestrianRequest && setSideRoadLight("yellow");
+        setTimeout(() => {
+          setMainRoadLight("red");
+          setTimeout(() => {
+            if (!pedestrianRequest) {
+              if (sideRoadLight === "red") {
+                setSideRoadLight("green");
+                setTimeout(() => {
+                  setSideRoadLight("yellow");
+                  setMainRoadLight("yellow");
+                  setTimeout(() => {
+                    setSideRoadLight("red");
+                    setTimeout(() => {
+                      setMainRoadLight("green");
+                    }, 5000);
+                  }, 1000);
+                }, 5000);
+              } else if (sideRoadLight === "green") {
+                setMainRoadLight("red");
+              }
+            }
+          }, 2000);
+        }, 1000);
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [mainRoadLight, pedestrianRequest, sideRoadLight]);
   return (
     <>
       <h1>Traffic light demo</h1>
