@@ -64,6 +64,17 @@ const PedestrianButton = styled(Button)(() => ({
 }));
 
 function App() {
+  const [mainRoadLight, setMainRoadLight] = useState<
+    "green" | "yellow" | "red"
+  >("green");
+  const [sideRoadLight, setSideRoadLight] = useState<
+    "green" | "yellow" | "red"
+  >("red");
+  const [pedestrianLight, setPedestrianLight] = useState<"red" | "green">(
+    "red"
+  );
+  const [pedestrianRequest, setPedestrianRequest] = useState(false);
+  const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
   return (
     <>
       <h1>Traffic light demo</h1>
