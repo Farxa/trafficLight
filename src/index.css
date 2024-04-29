@@ -1,0 +1,21 @@
+:root {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: "#DDDDDD";
+  /* background-image: url("./assets/crossroad.png");
+  background-size: cover;
+  background-repeat: no-repeat; */
+}
+html {
+  padding: 0;
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+}
