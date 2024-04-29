@@ -109,6 +109,34 @@ function App() {
       clearInterval(timer);
     };
   }, [mainRoadLight, pedestrianRequest, sideRoadLight]);
+
+  useEffect(() => {
+    if (
+      pedestrianRequest &&
+      mainRoadLight === "red" &&
+      sideRoadLight === "red"
+    ) {
+      setPedestrianLight("green");
+      setTimeout(() => {
+        setPedestrianLight("red");
+        setPedestrianRequest(false);
+        setSideRoadLight("yellow");
+        setTimeout(() => {
+          setSideRoadLight("green");
+        }, 1000);
+        setTimeout(() => {
+          setSideRoadLight("yellow");
+          setTimeout(() => {
+            setSideRoadLight("red");
+            setMainRoadLight("yellow");
+            setTimeout(() => {
+              setMainRoadLight("green");
+            }, 5000);
+          }, 1000);
+        }, 5000);
+      }, 5000);
+    }
+  }, [pedestrianRequest, mainRoadLight, sideRoadLight]);
   return (
     <>
       <h1>Traffic light demo</h1>
