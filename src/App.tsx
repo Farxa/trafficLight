@@ -18,39 +18,45 @@ function App() {
   );
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
+  const [mainRoadRedYellowFlashing, setMainRoadRedYellowFlashing] =
+    useState(false);
+  const [sideRoadRedYellowFlashing, setSideRoadRedYellowFlashing] =
+    useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (mainRoadLight === "green") {
         setMainRoadLight("yellow");
-        !pedestrianRequest && setSideRoadLight("yellow");
         setTimeout(() => {
           setMainRoadLight("red");
-          !pedestrianRequest && setSideRoadLight("green");
-          setTimeout(() => {
-            if (!pedestrianRequest) {
-              if (sideRoadLight === "red") {
-                setSideRoadLight("green");
-                setMainRoadLight("red");
+          // setSideRoadLight("red");
+          // setMainRoadRedYellowFlashing(true);
+          // setSideRoadRedYellowFlashing(true);
+          // setTimeout(() => {
+          // setMainRoadRedYellowFlashing(false);
+          // setSideRoadRedYellowFlashing(false);
+          if (!pedestrianRequest) {
+            setSideRoadLight("green");
+            setTimeout(() => {
+              setSideRoadLight("yellow");
+              setTimeout(() => {
+                setSideRoadLight("red");
+                setMainRoadLight("yellow");
                 setTimeout(() => {
-                  setSideRoadLight("yellow");
-                  setMainRoadLight("yellow");
-                  setTimeout(() => {
-                    setSideRoadLight("red");
-                    setMainRoadLight("green");
-                  }, 1000);
-                }, 5000);
-              }
-            }
-          }, 2000);
+                  setMainRoadLight("green");
+                }, 1000);
+              }, 1000);
+            }, 5000);
+          }
+          // }, 2000);
         }, 1000);
       }
-    }, 5000);
+    }, 8000);
 
     return () => {
       clearInterval(timer);
     };
-  }, [mainRoadLight, pedestrianRequest, sideRoadLight]);
+  }, [mainRoadLight, pedestrianRequest]);
 
   useEffect(() => {
     if (
@@ -62,10 +68,7 @@ function App() {
       setTimeout(() => {
         setPedestrianLight("red");
         setPedestrianRequest(false);
-        setSideRoadLight("yellow");
-        setTimeout(() => {
-          setSideRoadLight("green");
-        }, 1000);
+        setSideRoadLight("green");
         setTimeout(() => {
           setSideRoadLight("yellow");
           setTimeout(() => {
@@ -73,7 +76,7 @@ function App() {
             setMainRoadLight("yellow");
             setTimeout(() => {
               setMainRoadLight("green");
-            }, 5000);
+            }, 1000);
           }, 1000);
         }, 5000);
       }, 5000);
@@ -112,9 +115,12 @@ function App() {
               Start
             </PedestrianButton>
             <TrafficLight
-              redLight={mainRoadLight === "red"}
-              yellowLight={mainRoadLight === "yellow"}
+              redLight={mainRoadLight === "red" && !mainRoadRedYellowFlashing}
+              yellowLight={
+                mainRoadLight === "yellow" && !mainRoadRedYellowFlashing
+              }
               greenLight={mainRoadLight === "green"}
+              redYellow={mainRoadRedYellowFlashing}
               orientation="horizontal"
               style={{
                 display: "flex",
@@ -149,9 +155,12 @@ function App() {
           <Container />
           <Container>
             <TrafficLight
-              redLight={sideRoadLight === "red"}
-              yellowLight={sideRoadLight === "yellow"}
+              redLight={sideRoadLight === "red" && !sideRoadRedYellowFlashing}
+              yellowLight={
+                sideRoadLight === "yellow" && !sideRoadRedYellowFlashing
+              }
               greenLight={sideRoadLight === "green"}
+              redYellow={sideRoadRedYellowFlashing}
               style={{
                 position: "absolute",
                 top: 150,

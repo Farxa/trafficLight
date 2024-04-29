@@ -13,6 +13,7 @@ export const TrafficLightContainer = styled(Box)({
 interface TrafficLightProps {
   redLight: boolean;
   yellowLight?: boolean;
+  redYellow?: boolean;
   greenLight: boolean;
   blinking?: boolean;
   orientation?: "horizontal" | "vertical";
@@ -22,6 +23,7 @@ interface TrafficLightProps {
 export const TrafficLight: React.FC<TrafficLightProps> = ({
   redLight,
   yellowLight,
+  redYellow,
   greenLight,
   blinking = false,
   orientation = "vertical",
@@ -34,9 +36,12 @@ export const TrafficLight: React.FC<TrafficLightProps> = ({
         ...style,
       }}
     >
-      <LightCircle color={redLight ? "red" : "#CCCCCC"} blinking={blinking} />
+      <LightCircle
+        color={redLight || redYellow ? "red" : "#CCCCCC"}
+        blinking={blinking}
+      />
       {yellowLight !== undefined && (
-        <LightCircle color={yellowLight ? "yellow" : "#CCCCCC"} />
+        <LightCircle color={yellowLight || redYellow ? "yellow" : "#CCCCCC"} />
       )}
       <LightCircle color={greenLight ? "green" : "#CCCCCC"} />
     </TrafficLightContainer>
