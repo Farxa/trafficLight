@@ -58,8 +58,8 @@ const PedestrianButton = styled(Button)(() => ({
   height: "fit-content",
   width: "fit-content",
   position: "absolute",
-  top: 0,
-  left: 0,
+  top: 20,
+  left: 60,
 }));
 
 function App() {
@@ -175,8 +175,9 @@ function App() {
               style={{
                 display: "flex",
                 position: "absolute",
-                bottom: 0,
-                right: 0,
+                bottom: 40,
+                right: 110,
+                gap: "10px",
               }}
             >
               <LightCircle
@@ -202,12 +203,11 @@ function App() {
             <Box
               style={{
                 position: "absolute",
-                bottom: 0,
+                bottom: 10,
                 left: "50%",
-                transform: "translateX(-50%)",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                gap: "10px",
               }}
             >
               <TrafficLight>
@@ -237,8 +237,8 @@ function App() {
             <TrafficLight
               style={{
                 position: "absolute",
-                top: 0,
-                left: 0,
+                top: 150,
+                left: 110,
               }}
             >
               <LightCircle
