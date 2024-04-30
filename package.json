@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://farxa.github.io/trafficLight/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
