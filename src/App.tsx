@@ -25,19 +25,6 @@ function App() {
   );
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
-  /**
-  1. The main road light is set to 'green' the side road to 'red' and the pedestrian crossing to 'red' at initial state.
-
-The following conditions must always be met: 
-
-The traffic light (main or side road lights) changes from yellow to red, and from red, simultaneously flashing yellow, to green. like this: 
-- green 5s -> yellow 1s -> red 2s
-- red 2s -> red-yellow 2s -> green (transition time represented by -> is 1s)
-- if main road light is green, side road light cannot be green. if side road light is green, main road light cannot be green. if sideroad light is green or yellow, Pedestrians light cannot be green.
-- for Pedestrians light we always need pedestrianRequest to be true, otherwise this light stays red. once handlePedestrianRequest is clicked, the pedestrian light blinks (setPedestrianRequest(true)) until it becomes green, Green phase lasts for 5 seconds.
-
-2. initially, if no pedestrianRequest happen and the main road light is green: The side road light gets a 1s red-yellow then a 5-second green light and the main road light gets and 1s yellow then a 2s red
-   */
 
   useEffect(() => {
     const lightDurations: Record<LightState["color"], number> = {
@@ -50,12 +37,10 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
     const transitionTime = 1000;
 
     const switchLights = () => {
-      if (!pedestrianRequest) {
-        if (mainRoadLight.color === "green") {
-          setMainRoadLight({
-            color: "yellow",
-            duration: lightDurations.yellow,
-          });
+      if (mainRoadLight.color === "green") {
+        setMainRoadLight({ color: "yellow", duration: lightDurations.yellow });
+        setTimeout(() => {
+          setMainRoadLight({ color: "red", duration: lightDurations.red });
           setTimeout(() => {
             setSideRoadLight({
               color: "redYellow",
@@ -67,15 +52,12 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
                 duration: lightDurations.green,
               });
             }, lightDurations.redYellow + transitionTime);
-          }, transitionTime);
-          setTimeout(() => {
-            setMainRoadLight({ color: "red", duration: lightDurations.red });
-          }, lightDurations.yellow + transitionTime);
-        } else if (sideRoadLight.color === "green") {
-          setSideRoadLight({
-            color: "yellow",
-            duration: lightDurations.yellow,
-          });
+          }, lightDurations.red + transitionTime);
+        }, lightDurations.yellow + transitionTime);
+      } else if (sideRoadLight.color === "green") {
+        setSideRoadLight({ color: "yellow", duration: lightDurations.yellow });
+        setTimeout(() => {
+          setSideRoadLight({ color: "red", duration: lightDurations.red });
           setTimeout(() => {
             setMainRoadLight({
               color: "redYellow",
@@ -87,11 +69,8 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
                 duration: lightDurations.green,
               });
             }, lightDurations.redYellow + transitionTime);
-          }, transitionTime);
-          setTimeout(() => {
-            setSideRoadLight({ color: "red", duration: lightDurations.red });
-          }, lightDurations.yellow + transitionTime);
-        }
+          }, lightDurations.red + transitionTime);
+        }, lightDurations.yellow + transitionTime);
       }
     };
 
@@ -100,35 +79,24 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
     return () => {
       clearTimeout(timer);
     };
-  }, [mainRoadLight, sideRoadLight, pedestrianRequest]);
+  }, [mainRoadLight, sideRoadLight]);
 
   useEffect(() => {
     if (
       pedestrianRequest &&
-      mainRoadLight === "red" &&
-      sideRoadLight === "red"
+      mainRoadLight.color === "red" &&
+      sideRoadLight.color === "red"
     ) {
-      setPedestrianLight("green");
+      setPedestrianLight({ color: "green", duration: 5000 });
       setTimeout(() => {
-        setPedestrianLight("red");
+        setPedestrianLight({ color: "red", duration: 0 });
         setPedestrianRequest(false);
-        setSideRoadLight("green");
-        setTimeout(() => {
-          setSideRoadLight("yellow");
-          setTimeout(() => {
-            setSideRoadLight("red");
-            setMainRoadLight("yellow");
-            setTimeout(() => {
-              setMainRoadLight("green");
-            }, 1000);
-          }, 1000);
-        }, 5000);
       }, 5000);
     }
   }, [pedestrianRequest, mainRoadLight, sideRoadLight]);
 
   useEffect(() => {
-    if (pedestrianRequest && pedestrianLight === "red") {
+    if (pedestrianRequest && pedestrianLight.color === "red") {
       setPedestrianBlinking(true);
     } else {
       setPedestrianBlinking(false);
@@ -159,12 +127,10 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
               Start
             </PedestrianButton>
             <TrafficLight
-              redLight={mainRoadLight === "red" && !mainRoadRedYellowFlashing}
-              yellowLight={
-                mainRoadLight === "yellow" && !mainRoadRedYellowFlashing
-              }
-              greenLight={mainRoadLight === "green"}
-              redYellow={mainRoadRedYellowFlashing}
+              redLight={mainRoadLight.color === "red"}
+              yellowLight={mainRoadLight.color === "yellow"}
+              greenLight={mainRoadLight.color === "green"}
+              redYellow={mainRoadLight.color === "redYellow"}
               orientation="horizontal"
               style={{
                 display: "flex",
@@ -187,8 +153,8 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
               }}
             >
               <TrafficLight
-                redLight={pedestrianLight === "red"}
-                greenLight={pedestrianLight === "green"}
+                redLight={pedestrianLight.color === "red"}
+                greenLight={pedestrianLight.color === "green"}
                 blinking={pedestrianBlinking}
               />
               <FontAwesomeIcon icon={faPersonWalking} color="black" size="3x" />
@@ -199,12 +165,10 @@ The traffic light (main or side road lights) changes from yellow to red, and fro
           <Container />
           <Container>
             <TrafficLight
-              redLight={sideRoadLight === "red" && !sideRoadRedYellowFlashing}
-              yellowLight={
-                sideRoadLight === "yellow" && !sideRoadRedYellowFlashing
-              }
-              greenLight={sideRoadLight === "green"}
-              redYellow={sideRoadRedYellowFlashing}
+              redLight={sideRoadLight.color === "red"}
+              yellowLight={sideRoadLight.color === "yellow"}
+              greenLight={sideRoadLight.color === "green"}
+              redYellow={sideRoadLight.color === "redYellow"}
               style={{
                 position: "absolute",
                 top: 150,
