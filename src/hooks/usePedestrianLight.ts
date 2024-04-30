@@ -1,18 +1,26 @@
-import { useState, useEffect } from "react";
-import { useTrafficLights } from "./useTrafficLights";
-import { LightState } from "../types";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useContext } from "react";
+import { StateContext } from "../StateContext";
 
 
-const initialPedestrianLight: LightState = { color: "red", duration: 0 };
 
 export const usePedestrianLight = () => {
-    const [pedestrianLight, setPedestrianLight] = useState<LightState>(
-        initialPedestrianLight
-    );
-    const [pedestrianRequest, setPedestrianRequest] = useState(false);
-    const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
+    const state = useContext(StateContext);
 
-    const { mainRoadLight, sideRoadLight } = useTrafficLights();
+    if (!state) {
+        throw new Error("usePedestrianLight must be used within a StateProvider");
+    }
+
+    const {
+        mainRoadLight,
+        sideRoadLight,
+        pedestrianLight,
+        pedestrianRequest,
+        pedestrianBlinking,
+        setPedestrianLight,
+        setPedestrianRequest,
+        setPedestrianBlinking,
+    } = state;
 
     useEffect(() => {
         if (
@@ -20,6 +28,7 @@ export const usePedestrianLight = () => {
             mainRoadLight.color === "red" &&
             sideRoadLight.color === "red"
         ) {
+            setPedestrianBlinking(false);
             setPedestrianLight({ color: "green", duration: 5000 });
             setTimeout(() => {
                 setPedestrianLight({ color: "red", duration: 0 });
@@ -31,8 +40,6 @@ export const usePedestrianLight = () => {
     useEffect(() => {
         if (pedestrianRequest && pedestrianLight.color === "red") {
             setPedestrianBlinking(true);
-        } else {
-            setPedestrianBlinking(false);
         }
     }, [pedestrianRequest, pedestrianLight]);
 

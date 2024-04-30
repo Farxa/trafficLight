@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
-import { LightState } from "../types";
+import { useEffect, useContext } from "react";
+import { StateContext } from "../StateContext";
 
-const lightDurations: Record<LightState["color"], number> = {
-    green: 5000,
-    yellow: 1000,
-    red: 2000,
-    redYellow: 2000,
-};
 
-const transitionTime = 1000;
-const initialMainRoadLight: LightState = { color: "green", duration: 2000 };
-const initialSideRoadLight: LightState = { color: "red", duration: 2000 };
 
 export const useTrafficLights = () => {
-    const [mainRoadLight, setMainRoadLight] =
-        useState<LightState>(initialMainRoadLight);
-    const [sideRoadLight, setSideRoadLight] =
-        useState<LightState>(initialSideRoadLight);
+    const state = useContext(StateContext);
+
+    if (!state) {
+        throw new Error("useTrafficLights must be used within a StateProvider");
+    }
+
+    const {
+        mainRoadLight,
+        setMainRoadLight,
+        sideRoadLight,
+        setSideRoadLight,
+        lightDurations,
+        transitionTime,
+    } = state;
 
     useEffect(() => {
         const switchLights = () => {
@@ -64,6 +65,7 @@ export const useTrafficLights = () => {
         return () => {
             clearTimeout(timer);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mainRoadLight, sideRoadLight]);
     return { mainRoadLight, sideRoadLight };
 }
