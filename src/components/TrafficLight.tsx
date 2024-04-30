@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
+import { Box, SxProps, Theme } from "@mui/material";
 import { LightCircle } from "./LightCircle";
 
 export const TrafficLightContainer = styled(Box)({
@@ -18,6 +18,7 @@ interface TrafficLightProps {
   blinking?: boolean;
   orientation?: "horizontal" | "vertical";
   style?: React.CSSProperties;
+  sx?: SxProps<Theme>;
 }
 
 export const TrafficLight: React.FC<TrafficLightProps> = ({
@@ -27,13 +28,13 @@ export const TrafficLight: React.FC<TrafficLightProps> = ({
   greenLight,
   blinking = false,
   orientation = "vertical",
-  style,
+  sx,
 }) => {
   return (
     <TrafficLightContainer
-      style={{
+      sx={{
         flexDirection: orientation === "vertical" ? "column" : "row",
-        ...style,
+        ...sx,
       }}
     >
       <LightCircle

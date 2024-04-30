@@ -6,8 +6,10 @@ import { usePedestrianLight } from "./hooks/usePedestrianLight";
 import { TrafficLight } from "./components/TrafficLight";
 import { PedestrianButton } from "./components/PedestrianButton";
 import { Root, Row, Container } from "./components/Layout";
+import { useTheme } from "@mui/material/styles";
 
 function App() {
+  const theme = useTheme();
   const { mainRoadLight, sideRoadLight } = useTrafficLights();
   const { pedestrianLight, pedestrianBlinking, handlePedestrianRequest } =
     usePedestrianLight();
@@ -16,7 +18,11 @@ function App() {
       <Typography
         variant="h1"
         gutterBottom
-        sx={{ margin: "40px", padding: "10px", textAlign: "center" }}
+        sx={{
+          margin: theme.spacing(5),
+          padding: theme.spacing(1),
+          textAlign: "center",
+        }}
       >
         Traffic Lights Demo
       </Typography>
@@ -27,6 +33,11 @@ function App() {
               variant="contained"
               color="primary"
               onClick={handlePedestrianRequest}
+              sx={{
+                position: "absolute",
+                top: theme.spacing(2),
+                left: theme.spacing(7),
+              }}
             >
               Start
             </PedestrianButton>
@@ -36,7 +47,7 @@ function App() {
               greenLight={mainRoadLight.color === "green"}
               redYellow={mainRoadLight.color === "redYellow"}
               orientation="horizontal"
-              style={{
+              sx={{
                 display: "flex",
                 position: "absolute",
                 bottom: 40,
@@ -47,13 +58,13 @@ function App() {
           </Container>
           <Container>
             <Box
-              style={{
+              sx={{
                 position: "absolute",
-                bottom: 10,
+                bottom: theme.spacing(1),
                 left: "50%",
                 display: "flex",
                 flexDirection: "column",
-                gap: "10px",
+                gap: theme.spacing(1),
               }}
             >
               <TrafficLight
@@ -73,10 +84,10 @@ function App() {
               yellowLight={sideRoadLight.color === "yellow"}
               greenLight={sideRoadLight.color === "green"}
               redYellow={sideRoadLight.color === "redYellow"}
-              style={{
+              sx={{
                 position: "absolute",
-                top: 150,
-                left: 110,
+                top: theme.spacing(19),
+                left: theme.spacing(14),
               }}
             />
           </Container>
