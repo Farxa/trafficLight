@@ -2,13 +2,21 @@
 
 This project is a simple demonstration of a traffic light system using React and TypeScript. It simulates the behavior of traffic lights at an intersection, including pedestrian crossing functionality.
 
-## Features
+## Traffic control system
 
-- Main road traffic light with red, yellow, and green states
-- Side road traffic light with red, yellow, and green states
-- Pedestrian traffic light with red and green states, and a blinking state
-- Pedestrian button to request crossing
-- Responsive layout using Material-UI components
+- The main road is set to 'go,' the side road to 'stop,' and the pedestrian crossing to 'standby' at the start.
+- The side road gets a 5-second green light.
+- Pedestrians must always request permission to cross.
+- The pedestrian light switches between red and green. Green phase lasts for 5 seconds.
+- The traffic light changes from yellow to red, and from red, simultaneously flashing yellow, to green.
+- No two traffic lights should be green at the same time.
+
+Traffic Light Timing:
+
+Red: 2 seconds
+Yellow: 1 second
+Red-yellow: 2 seconds
+Transition time: 1 second
 
 ## Prerequisites
 
