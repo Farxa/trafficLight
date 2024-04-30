@@ -7,8 +7,6 @@ interface StateContextType {
   pedestrianRequest: boolean;
   setPedestrianRequest: React.Dispatch<React.SetStateAction<boolean>>;
   pedestrianBlinking: boolean;
-  switchingLights: boolean;
-  setSwitchingLights: React.Dispatch<React.SetStateAction<boolean>>;
   setPedestrianBlinking: React.Dispatch<React.SetStateAction<boolean>>;
   mainRoadLight: LightState;
   setMainRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
@@ -16,7 +14,6 @@ interface StateContextType {
   setSideRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
   lightDurations: Record<LightState["color"], number>;
   transitionTime: number;
-  blinkingDelay: number;
 }
 
 export const StateContext = createContext<StateContextType | undefined>(
@@ -34,7 +31,7 @@ export const StateProvider: React.FC<StateProviderProps> = ({ children }) => {
   });
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
-  const [switchingLights, setSwitchingLights] = useState(false);
+
   const [mainRoadLight, setMainRoadLight] = useState<LightState>({
     color: "green",
     duration: 2000,
@@ -52,7 +49,6 @@ export const StateProvider: React.FC<StateProviderProps> = ({ children }) => {
   };
 
   const transitionTime = 1000;
-  const blinkingDelay = 1000;
 
   return (
     <StateContext.Provider
@@ -69,9 +65,6 @@ export const StateProvider: React.FC<StateProviderProps> = ({ children }) => {
         setSideRoadLight,
         lightDurations,
         transitionTime,
-        blinkingDelay,
-        switchingLights,
-        setSwitchingLights,
       }}
     >
       {children}
