@@ -2,111 +2,16 @@ import { useState, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonWalking } from "@fortawesome/free-solid-svg-icons";
+import { useTrafficLights } from "./hooks/useTrafficLights";
+import { usePedestrianLight } from "./hooks/usePedestrianLight";
 import { TrafficLight } from "./components/TrafficLight";
 import { PedestrianButton } from "./components/PedestrianButton";
 import { Root, Row, Container } from "./components/Layout";
 
-interface LightState {
-  color: "green" | "yellow" | "red" | "redYellow";
-  duration: number;
-}
-
-const initialMainRoadLight: LightState = { color: "green", duration: 2000 };
-const initialSideRoadLight: LightState = { color: "red", duration: 2000 };
-const initialPedestrianLight: LightState = { color: "red", duration: 0 };
-
 function App() {
-  const [mainRoadLight, setMainRoadLight] =
-    useState<LightState>(initialMainRoadLight);
-  const [sideRoadLight, setSideRoadLight] =
-    useState<LightState>(initialSideRoadLight);
-  const [pedestrianLight, setPedestrianLight] = useState<LightState>(
-    initialPedestrianLight
-  );
-  const [pedestrianRequest, setPedestrianRequest] = useState(false);
-  const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
-
-  useEffect(() => {
-    const lightDurations: Record<LightState["color"], number> = {
-      green: 5000,
-      yellow: 1000,
-      red: 2000,
-      redYellow: 2000,
-    };
-
-    const transitionTime = 1000;
-
-    const switchLights = () => {
-      if (mainRoadLight.color === "green") {
-        setMainRoadLight({ color: "yellow", duration: lightDurations.yellow });
-        setTimeout(() => {
-          setMainRoadLight({ color: "red", duration: lightDurations.red });
-          setTimeout(() => {
-            setSideRoadLight({
-              color: "redYellow",
-              duration: lightDurations.redYellow,
-            });
-            setTimeout(() => {
-              setSideRoadLight({
-                color: "green",
-                duration: lightDurations.green,
-              });
-            }, lightDurations.redYellow + transitionTime);
-          }, lightDurations.red + transitionTime);
-        }, lightDurations.yellow + transitionTime);
-      } else if (sideRoadLight.color === "green") {
-        setSideRoadLight({ color: "yellow", duration: lightDurations.yellow });
-        setTimeout(() => {
-          setSideRoadLight({ color: "red", duration: lightDurations.red });
-          setTimeout(() => {
-            setMainRoadLight({
-              color: "redYellow",
-              duration: lightDurations.redYellow,
-            });
-            setTimeout(() => {
-              setMainRoadLight({
-                color: "green",
-                duration: lightDurations.green,
-              });
-            }, lightDurations.redYellow + transitionTime);
-          }, lightDurations.red + transitionTime);
-        }, lightDurations.yellow + transitionTime);
-      }
-    };
-
-    const timer = setTimeout(switchLights, mainRoadLight.duration);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [mainRoadLight, sideRoadLight]);
-
-  useEffect(() => {
-    if (
-      pedestrianRequest &&
-      mainRoadLight.color === "red" &&
-      sideRoadLight.color === "red"
-    ) {
-      setPedestrianLight({ color: "green", duration: 5000 });
-      setTimeout(() => {
-        setPedestrianLight({ color: "red", duration: 0 });
-        setPedestrianRequest(false);
-      }, 5000);
-    }
-  }, [pedestrianRequest, mainRoadLight, sideRoadLight]);
-
-  useEffect(() => {
-    if (pedestrianRequest && pedestrianLight.color === "red") {
-      setPedestrianBlinking(true);
-    } else {
-      setPedestrianBlinking(false);
-    }
-  }, [pedestrianRequest, pedestrianLight]);
-
-  const handlePedestrianRequest = () => {
-    setPedestrianRequest(true);
-  };
-
+  const { mainRoadLight, sideRoadLight } = useTrafficLights();
+  const { pedestrianLight, pedestrianBlinking, handlePedestrianRequest } =
+    usePedestrianLight();
   return (
     <>
       <Typography
