@@ -11,7 +11,7 @@ interface LightState {
   duration: number;
 }
 
-const initialMainRoadLight: LightState = { color: "green", duration: 5000 };
+const initialMainRoadLight: LightState = { color: "green", duration: 2000 };
 const initialSideRoadLight: LightState = { color: "red", duration: 2000 };
 const initialPedestrianLight: LightState = { color: "red", duration: 0 };
 
@@ -25,41 +25,82 @@ function App() {
   );
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
+  /**
+  1. The main road light is set to 'green' the side road to 'red' and the pedestrian crossing to 'red' at initial state.
+
+The following conditions must always be met: 
+
+The traffic light (main or side road lights) changes from yellow to red, and from red, simultaneously flashing yellow, to green. like this: 
+- green 5s -> yellow 1s -> red 2s
+- red 2s -> red-yellow 2s -> green (transition time represented by -> is 1s)
+- if main road light is green, side road light cannot be green. if side road light is green, main road light cannot be green. if sideroad light is green or yellow, Pedestrians light cannot be green.
+- for Pedestrians light we always need pedestrianRequest to be true, otherwise this light stays red. once handlePedestrianRequest is clicked, the pedestrian light blinks (setPedestrianRequest(true)) until it becomes green, Green phase lasts for 5 seconds.
+
+2. initially, if no pedestrianRequest happen and the main road light is green: The side road light gets a 1s red-yellow then a 5-second green light and the main road light gets and 1s yellow then a 2s red
+   */
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (mainRoadLight === "green") {
-        setMainRoadLight("yellow");
-        setTimeout(() => {
-          setMainRoadLight("red");
-          // setSideRoadLight("red");
-          // setMainRoadRedYellowFlashing(true);
-          // setSideRoadRedYellowFlashing(true);
-          // setTimeout(() => {
-          // setMainRoadRedYellowFlashing(false);
-          // setSideRoadRedYellowFlashing(false);
-          if (!pedestrianRequest) {
-            setSideRoadLight("green");
+    const lightDurations: Record<LightState["color"], number> = {
+      green: 5000,
+      yellow: 1000,
+      red: 2000,
+      redYellow: 2000,
+    };
+
+    const transitionTime = 1000;
+
+    const switchLights = () => {
+      if (!pedestrianRequest) {
+        if (mainRoadLight.color === "green") {
+          setMainRoadLight({
+            color: "yellow",
+            duration: lightDurations.yellow,
+          });
+          setTimeout(() => {
+            setSideRoadLight({
+              color: "redYellow",
+              duration: lightDurations.redYellow,
+            });
             setTimeout(() => {
-              setSideRoadLight("yellow");
-              setTimeout(() => {
-                setSideRoadLight("red");
-                setMainRoadLight("yellow");
-                setTimeout(() => {
-                  setMainRoadLight("green");
-                }, 1000);
-              }, 1000);
-            }, 5000);
-          }
-          // }, 2000);
-        }, 1000);
+              setSideRoadLight({
+                color: "green",
+                duration: lightDurations.green,
+              });
+            }, lightDurations.redYellow + transitionTime);
+          }, transitionTime);
+          setTimeout(() => {
+            setMainRoadLight({ color: "red", duration: lightDurations.red });
+          }, lightDurations.yellow + transitionTime);
+        } else if (sideRoadLight.color === "green") {
+          setSideRoadLight({
+            color: "yellow",
+            duration: lightDurations.yellow,
+          });
+          setTimeout(() => {
+            setMainRoadLight({
+              color: "redYellow",
+              duration: lightDurations.redYellow,
+            });
+            setTimeout(() => {
+              setMainRoadLight({
+                color: "green",
+                duration: lightDurations.green,
+              });
+            }, lightDurations.redYellow + transitionTime);
+          }, transitionTime);
+          setTimeout(() => {
+            setSideRoadLight({ color: "red", duration: lightDurations.red });
+          }, lightDurations.yellow + transitionTime);
+        }
       }
-    }, 8000);
+    };
+
+    const timer = setTimeout(switchLights, mainRoadLight.duration);
 
     return () => {
-      clearInterval(timer);
+      clearTimeout(timer);
     };
-  }, [mainRoadLight, pedestrianRequest]);
+  }, [mainRoadLight, sideRoadLight, pedestrianRequest]);
 
   useEffect(() => {
     if (
