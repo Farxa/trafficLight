@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonWalking } from "@fortawesome/free-solid-svg-icons";
