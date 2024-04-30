@@ -10,6 +10,11 @@ body {
   min-height: 100vh;
   background-color: "#DDDDDD";
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 html {
   padding: 0;

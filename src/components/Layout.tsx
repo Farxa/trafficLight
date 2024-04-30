@@ -5,9 +5,9 @@ import backgroundImage from "../assets/crossroad.png";
 export const Root = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  height: "100vh",
-  width: "100vw",
-  margin: "25px 0 0 0;",
+  height: "80vh",
+  width: "80vw",
+  // margin: "25px 0 0 0;",
   padding: 0,
   backgroundImage: `url(${backgroundImage})`,
   backgroundSize: "cover",
