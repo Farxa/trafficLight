@@ -6,22 +6,25 @@ import { TrafficLight } from "./components/TrafficLight";
 import { PedestrianButton } from "./components/PedestrianButton";
 import { Root, Row, Container } from "./components/Layout";
 
+interface LightState {
+  color: "green" | "yellow" | "red" | "redYellow";
+  duration: number;
+}
+
+const initialMainRoadLight: LightState = { color: "green", duration: 5000 };
+const initialSideRoadLight: LightState = { color: "red", duration: 2000 };
+const initialPedestrianLight: LightState = { color: "red", duration: 0 };
+
 function App() {
-  const [mainRoadLight, setMainRoadLight] = useState<
-    "green" | "yellow" | "red"
-  >("green");
-  const [sideRoadLight, setSideRoadLight] = useState<
-    "green" | "yellow" | "red"
-  >("red");
-  const [pedestrianLight, setPedestrianLight] = useState<"red" | "green">(
-    "red"
+  const [mainRoadLight, setMainRoadLight] =
+    useState<LightState>(initialMainRoadLight);
+  const [sideRoadLight, setSideRoadLight] =
+    useState<LightState>(initialSideRoadLight);
+  const [pedestrianLight, setPedestrianLight] = useState<LightState>(
+    initialPedestrianLight
   );
   const [pedestrianRequest, setPedestrianRequest] = useState(false);
   const [pedestrianBlinking, setPedestrianBlinking] = useState(false);
-  const [mainRoadRedYellowFlashing, setMainRoadRedYellowFlashing] =
-    useState(false);
-  const [sideRoadRedYellowFlashing, setSideRoadRedYellowFlashing] =
-    useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
