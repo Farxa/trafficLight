@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext } from "react";
 import { StateContext } from "../StateContext";
+import { StateContextType } from "../types";
 
 export const usePedestrianLight = () => {
     const state = useContext(StateContext);
 
-    if (!state) {
-        throw new Error("usePedestrianLight must be used within a StateProvider");
-    }
+
 
     const {
         mainRoadLight,
@@ -18,7 +17,7 @@ export const usePedestrianLight = () => {
         setPedestrianLight,
         setPedestrianRequest,
         setPedestrianBlinking,
-    } = state;
+    } = state as StateContextType;
 
     useEffect(() => {
         if (
