@@ -13,10 +13,10 @@ This project is a simple demonstration of a traffic light system using React and
 
 Traffic Light Timing:
 
-Red: 2 seconds
-Yellow: 1 second
-Red-yellow: 2 seconds
-Transition time: 1 second
+- Red: 2 seconds
+- Yellow: 1 second
+- Red-yellow: 2 seconds
+- Transition time: 1 second
 
 ## Prerequisites
 
