@@ -1,12 +1,9 @@
 import { useEffect, useContext } from "react";
 import { StateContext } from "../StateContext";
+import { StateContextType } from "../types";
 
 export const useTrafficLights = () => {
     const state = useContext(StateContext);
-
-    if (!state) {
-        throw new Error("useTrafficLights must be used within a StateProvider");
-    }
 
     const {
         mainRoadLight,
@@ -15,49 +12,69 @@ export const useTrafficLights = () => {
         setSideRoadLight,
         lightDurations,
         transitionTime,
-    } = state;
+    } = state as StateContextType;
 
-    useEffect(() => {
-        const switchLights = () => {
-            if (mainRoadLight.color === "green") {
-                setMainRoadLight({ color: "yellow", duration: lightDurations.yellow });
+    const switchMainRoadToGreen = () => {
+        setMainRoadLight({ color: "green", duration: lightDurations.green });
+    };
+
+    const switchMainRoadToRedYellow = () => {
+        setMainRoadLight({ color: "redYellow", duration: lightDurations.redYellow });
+    };
+
+    const switchMainRoadToRed = () => {
+        setMainRoadLight({ color: "red", duration: lightDurations.red });
+    };
+
+    const switchSideRoadToGreen = () => {
+        setSideRoadLight({ color: "green", duration: lightDurations.green });
+    };
+
+    const switchSideRoadToRedYellow = () => {
+        setSideRoadLight({ color: "redYellow", duration: lightDurations.redYellow });
+    };
+
+    const switchSideRoadToRed = () => {
+        setSideRoadLight({ color: "red", duration: lightDurations.red });
+    };
+
+    const switchMainRoadToYellow = () => {
+        setMainRoadLight({ color: "yellow", duration: lightDurations.yellow });
+    };
+
+    const switchSideRoadToYellow = () => {
+        setSideRoadLight({ color: "yellow", duration: lightDurations.yellow });
+    };
+
+
+    const switchLights = () => {
+        if (mainRoadLight.color === "green") {
+            switchMainRoadToYellow();
+            setTimeout(() => {
+                switchMainRoadToRed();
                 setTimeout(() => {
-                    setMainRoadLight({ color: "red", duration: lightDurations.red });
+                    switchSideRoadToRedYellow();
                     setTimeout(() => {
-                        setSideRoadLight({
-                            color: "redYellow",
-                            duration: lightDurations.redYellow,
-                        });
+                        switchSideRoadToGreen();
+                    }, lightDurations.redYellow + transitionTime);
+                }, lightDurations.red + transitionTime);
+            }, lightDurations.yellow + transitionTime);
+        } else if (sideRoadLight.color === "green") {
+            setTimeout(() => {
+                switchSideRoadToYellow();
+                setTimeout(() => {
+                    switchSideRoadToRed();
+                    setTimeout(() => {
+                        switchMainRoadToRedYellow();
                         setTimeout(() => {
-                            setSideRoadLight({
-                                color: "green",
-                                duration: lightDurations.green,
-                            });
+                            switchMainRoadToGreen();
                         }, lightDurations.redYellow + transitionTime);
                     }, lightDurations.red + transitionTime);
                 }, lightDurations.yellow + transitionTime);
-            } else if (sideRoadLight.color === "green") {
-                setTimeout(() => {
-                    setSideRoadLight({ color: "yellow", duration: lightDurations.yellow });
-                    setTimeout(() => {
-                        setSideRoadLight({ color: "red", duration: lightDurations.red });
-                        setTimeout(() => {
-                            setMainRoadLight({
-                                color: "redYellow",
-                                duration: lightDurations.redYellow,
-                            });
-                            setTimeout(() => {
-                                setMainRoadLight({
-                                    color: "green",
-                                    duration: lightDurations.green,
-                                });
-                            }, lightDurations.redYellow + transitionTime);
-                        }, lightDurations.red + transitionTime);
-                    }, lightDurations.yellow + transitionTime);
-                }, lightDurations.green);
-            }
-        };
-
+            }, lightDurations.green);
+        }
+    };
+    useEffect(() => {
         const timer = setTimeout(switchLights, mainRoadLight.duration);
 
         return () => {
