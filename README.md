@@ -88,11 +88,13 @@ yarn lint
 - `src/components/`: Contains reusable components used in the application.
   - `TrafficLight.tsx`: Represents a traffic light component with configurable light states and orientation.
   - `PedestrianButton.tsx`: Represents a button for pedestrians to request crossing.
-  - `Layout.tsx`: Contains layout components (`CrossRoadContainer`, `TrafficLightRow`, `TrafficLightContainer`) for structuring the application.
+  - `Layout.tsx`: Contains layout components (`CrossRoadContainer`, `TrafficLightRow`, `TrafficLightContainer`, `PedestrianLightContainer`, `PedestrianIconContainer`) for structuring the application.
+  - `Header.tsx`: Represents the header component of the application that holds the title.
 - `src/hooks/`: Contains custom hooks used in the application.
   - `useTrafficLights.ts`: Manages the state and logic for the main road and side road traffic lights.
   - `usePedestrianLight.ts`: Manages the state and logic for the pedestrian traffic light and handles pedestrian requests.
 - `src/types.ts`: Defines TypeScript types and interfaces used throughout the application.
+- `src/StateContext.tsx`: Provides a context for managing the global state of the application.
 
 The project utilizes the following libraries and frameworks:
 
@@ -101,3 +103,4 @@ The project utilizes the following libraries and frameworks:
 - [Material-UI (MUI)](https://mui.com/)
 - [Vite](https://vitejs.dev/)
 - [ESLint](https://eslint.org/)
+- [Font Awesome](https://fontawesome.com/) for icons
