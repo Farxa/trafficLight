@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Box, SxProps, Theme } from "@mui/material";
+import { Box } from "@mui/material";
 import { LightCircle } from "./LightCircle";
 import { LightState } from "../types";
 
