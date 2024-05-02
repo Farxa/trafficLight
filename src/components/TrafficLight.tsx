@@ -1,6 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { Box, SxProps, Theme } from "@mui/material";
 import { LightCircle } from "./LightCircle";
+import { LightState } from "../types";
 
 export const TrafficLightContainer = styled(Box)({
   borderRadius: 10,
@@ -11,40 +12,55 @@ export const TrafficLightContainer = styled(Box)({
 });
 
 interface TrafficLightProps {
-  redLight: boolean;
-  yellowLight?: boolean;
-  redYellow?: boolean;
-  greenLight: boolean;
+  lights: LightState;
   blinking?: boolean;
   orientation?: "horizontal" | "vertical";
-  style?: React.CSSProperties;
-  sx?: SxProps<Theme>;
+  position?: "top-left" | "bottom-right";
+  isPedestrianLight?: boolean;
 }
 
 export const TrafficLight: React.FC<TrafficLightProps> = ({
-  redLight,
-  yellowLight,
-  redYellow,
-  greenLight,
+  lights,
   blinking = false,
   orientation = "vertical",
-  sx,
+  position,
+  isPedestrianLight = false,
 }) => {
+  const { color } = lights;
+  const positionStyles = {
+    "top-left": {
+      position: "absolute",
+      top: 152,
+      left: 112,
+    },
+    "bottom-right": {
+      display: "flex",
+      position: "absolute",
+      bottom: 40,
+      right: 110,
+      gap: "10px",
+    },
+  };
+
   return (
     <TrafficLightContainer
       sx={{
         flexDirection: orientation === "vertical" ? "column" : "row",
-        ...sx,
+        ...(position ? positionStyles[position] : {}),
       }}
     >
       <LightCircle
-        color={redLight || redYellow ? "red" : "#CCCCCC"}
+        color={color === "red" || color === "redYellow" ? "red" : "#CCCCCC"}
         blinking={blinking}
       />
-      {yellowLight !== undefined && (
-        <LightCircle color={yellowLight || redYellow ? "yellow" : "#CCCCCC"} />
+      {!isPedestrianLight && (
+        <LightCircle
+          color={
+            color === "yellow" || color === "redYellow" ? "yellow" : "#CCCCCC"
+          }
+        />
       )}
-      <LightCircle color={greenLight ? "green" : "#CCCCCC"} />
+      <LightCircle color={color === "green" ? "green" : "#CCCCCC"} />
     </TrafficLightContainer>
   );
 };

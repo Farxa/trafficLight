@@ -5,6 +5,6 @@ export const PedestrianButton = styled(Button)(() => ({
   height: "fit-content",
   width: "fit-content",
   position: "absolute",
-  top: 20,
-  left: 60,
+  top: 16,
+  left: 56,
 }));

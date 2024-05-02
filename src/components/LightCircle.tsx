@@ -6,16 +6,13 @@ interface LightCircleProps {
   blinking?: boolean;
 }
 
-export const LightCircle: React.FC<LightCircleProps> = ({
-  color,
-  blinking = false,
-}) => {
-  const LightCircleContainer = styled(Box)({
+const LightCircleContainer = styled(Box)<{ blinking: boolean }>(
+  ({ blinking }) => ({
     width: 40,
     height: 40,
     borderRadius: "50%",
     margin: "10px auto",
-    backgroundColor: color,
+    backgroundColor: "currentColor",
     "@keyframes blink": {
       "0%": {
         opacity: 1,
@@ -28,7 +25,12 @@ export const LightCircle: React.FC<LightCircleProps> = ({
       },
     },
     animation: blinking ? "blink 0.5s linear infinite" : "none",
-  });
+  })
+);
 
-  return <LightCircleContainer />;
+export const LightCircle: React.FC<LightCircleProps> = ({
+  color,
+  blinking = false,
+}) => {
+  return <LightCircleContainer blinking={blinking} style={{ color }} />;
 };

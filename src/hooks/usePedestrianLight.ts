@@ -2,8 +2,6 @@
 import { useEffect, useContext } from "react";
 import { StateContext } from "../StateContext";
 
-
-
 export const usePedestrianLight = () => {
     const state = useContext(StateContext);
 

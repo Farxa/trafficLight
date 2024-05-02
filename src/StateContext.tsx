@@ -1,20 +1,5 @@
 import React, { createContext, useState } from "react";
-import { LightState } from "./types";
-
-interface StateContextType {
-  pedestrianLight: LightState;
-  setPedestrianLight: React.Dispatch<React.SetStateAction<LightState>>;
-  pedestrianRequest: boolean;
-  setPedestrianRequest: React.Dispatch<React.SetStateAction<boolean>>;
-  pedestrianBlinking: boolean;
-  setPedestrianBlinking: React.Dispatch<React.SetStateAction<boolean>>;
-  mainRoadLight: LightState;
-  setMainRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
-  sideRoadLight: LightState;
-  setSideRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
-  lightDurations: Record<LightState["color"], number>;
-  transitionTime: number;
-}
+import { LightState, StateContextType } from "./types";
 
 export const StateContext = createContext<StateContextType | undefined>(
   undefined

@@ -48,7 +48,7 @@ yarn install
 ## Usage
 
 1. Start the development server:
-   
+
 ```bash
 npm run dev
 
@@ -56,7 +56,7 @@ npm run dev
 
 yarn dev
 
-````
+```
 
 2. Open your browser and visit `http://localhost:5173` to see the application running.
 
@@ -68,7 +68,7 @@ To build the project for production, run:
 npm run build
 # or
 yarn build
-````
+```
 
 The optimized and minified files will be generated in the `dist` directory.
 
@@ -88,7 +88,7 @@ yarn lint
 - `src/components/`: Contains reusable components used in the application.
   - `TrafficLight.tsx`: Represents a traffic light component with configurable light states and orientation.
   - `PedestrianButton.tsx`: Represents a button for pedestrians to request crossing.
-  - `Layout.tsx`: Contains layout components (`Root`, `Row`, `Container`) for structuring the application.
+  - `Layout.tsx`: Contains layout components (`CrossRoadContainer`, `TrafficLightRow`, `TrafficLightContainer`) for structuring the application.
 - `src/hooks/`: Contains custom hooks used in the application.
   - `useTrafficLights.ts`: Manages the state and logic for the main road and side road traffic lights.
   - `usePedestrianLight.ts`: Manages the state and logic for the pedestrian traffic light and handles pedestrian requests.

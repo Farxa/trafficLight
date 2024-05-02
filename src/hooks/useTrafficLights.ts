@@ -1,8 +1,6 @@
 import { useEffect, useContext } from "react";
 import { StateContext } from "../StateContext";
 
-
-
 export const useTrafficLights = () => {
     const state = useContext(StateContext);
 
