@@ -16,6 +16,6 @@ export interface StateContextType {
     setMainRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
     sideRoadLight: LightState;
     setSideRoadLight: React.Dispatch<React.SetStateAction<LightState>>;
-    lightDurations: Record<LightState["color"], number>;
+    lightDurations: Record<LightColor, number>;
     transitionTime: number;
 }

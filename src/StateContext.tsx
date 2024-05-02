@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { LightState, StateContextType } from "./types";
+import { LightState, LightColor, StateContextType } from "./types";
 
 export const StateContext = createContext<StateContextType | undefined>(
   undefined
@@ -26,7 +26,7 @@ export const StateProvider: React.FC<StateProviderProps> = ({ children }) => {
     duration: 2000,
   });
 
-  const lightDurations: Record<LightState["color"], number> = {
+  const lightDurations: Record<LightColor, number> = {
     green: 5000,
     yellow: 1000,
     red: 2000,
